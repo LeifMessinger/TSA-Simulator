@@ -6,12 +6,15 @@
 		<style>
 			* { margin: 0; padding: 0;}
 
-			body, html {
+			body, html, div {
 			height:100%;
 			overflow: hidden;
 			touch-action: none;
 			}
-
+			.letTheBodiesHitTheFloor{
+				position:absolute;
+				touch-action: none;
+			}
 			#screen {
 				position:absolute;
 				touch-action: none;
@@ -21,11 +24,21 @@
 		</style>
 	</head>
 	<body>
-		<canvas id="screen" width="400" height="400"></canvas>
+		<div id = 'briefcase'>
+			
+		</div>
+		<!--<canvas id="screen" width="400" height="400"></canvas>-->
 		<!--<yeet id = "yeet">bruh</yeet>-->
 		<br>
 		<script>
-			var screen = document.getElementById('screen');
+			var x = document.createElement("IMG"),
+			briefcase = document.getElementById('briefcase');
+			x.setAttribute("src", "https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg");
+			//x.setAttribute("width", "304");
+			//x.setAttribute("height", "228");
+			x.setAttribute("alt", "banan");
+			briefcase.appendChild(x);
+			/*var screen = document.getElementById('screen');
 			var ctx = screen.getContext("2d");
 			var backgroundColor = "blue";
 			function resize(){//Resize canvas to window size
@@ -53,7 +66,7 @@
 				console.log("clientX: " + event.clientX + " - clientY: " + event.clientY);
 				draw();
 			}
-			document.addEventListener("click", registerMouseClick);
+			document.addEventListener("click", registerMouseClick);*/
 		</script>
 	</body>
 </html>
