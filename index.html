@@ -6,10 +6,15 @@
 		<style>
 			* { margin: 0; padding: 0;}
 
-			body, html, div {
+			body, html{
 			height:100%;
 			overflow: hidden;
 			touch-action: none;
+			}
+			#briefcase{
+				position: relative;
+				//top: 300px;
+				//left: 100px;
 			}
 			.letTheBodiesHitTheFloor{
 				position:absolute;
@@ -24,20 +29,34 @@
 		</style>
 	</head>
 	<body>
-		<div id = 'briefcase'>
+		<div id = 'briefcase' class = 'letTheBodiesHitTheFloor'>
 			
 		</div>
 		<!--<canvas id="screen" width="400" height="400"></canvas>-->
 		<!--<yeet id = "yeet">bruh</yeet>-->
 		<br>
 		<script>
-			var x = document.createElement("IMG"),
 			briefcase = document.getElementById('briefcase');
-			x.setAttribute("src", "https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg");
-			//x.setAttribute("width", "304");
-			//x.setAttribute("height", "228");
-			x.setAttribute("alt", "banan");
-			briefcase.appendChild(x);
+			function placePhoto(vars){
+				if(vars != null){
+					let elm = document.createElement("IMG");
+					if(vars.src) elm.setAttribute("src", vars.src);
+					if(vars.width) elm.setAttribute("width", vars.width);
+					if(vars.height) elm.setAttribute("height", vars.height);
+					elm.style.position = "absolute";
+					if(vars.top) elm.style.top = vars.top;
+					if(vars.left) elm.style.left = vars.left;
+					if(vars.alt) elm.setAttribute("alt", vars.alt);
+					if(vars.title) elm.setAttribute("title", vars.title);
+					briefcase.appendChild(elm);
+				}else{
+					placePhoto({src:"https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg",top: "100px",left:"100px",alt:"oh shid",title:"She's Bananas, B A N A N A S"})
+				}
+			}
+			placePhoto();
+			//placePhoto("https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg");
+			//placePhoto("https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg","oh shid","She's Bananas, B A N A N A S");
+			
 			/*var screen = document.getElementById('screen');
 			var ctx = screen.getContext("2d");
 			var backgroundColor = "blue";
