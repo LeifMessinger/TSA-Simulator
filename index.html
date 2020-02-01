@@ -17,8 +17,13 @@
 				//left: 100px;
 			}
 			.letTheBodiesHitTheFloor{
+				margin: 10px;
+				filter: grayscale(90%) opacity(50%);
 				position:absolute;
 				touch-action: none;
+				transform-origin: center;
+				width: 10%;
+				//height:90%;
 			}
 			#screen {
 				position:absolute;
@@ -29,7 +34,7 @@
 		</style>
 	</head>
 	<body>
-		<div id = 'briefcase' class = 'letTheBodiesHitTheFloor'>
+		<div id = 'briefcase'>
 			
 		</div>
 		<!--<canvas id="screen" width="400" height="400"></canvas>-->
@@ -39,24 +44,42 @@
 			briefcase = document.getElementById('briefcase');
 			function placePhoto(vars){
 				if(vars != null){
-					let elm = document.createElement("IMG");
-					if(vars.src) elm.setAttribute("src", vars.src);
-					if(vars.width) elm.setAttribute("width", vars.width);
-					if(vars.height) elm.setAttribute("height", vars.height);
-					elm.style.position = "absolute";
-					if(vars.top) elm.style.top = vars.top;
-					if(vars.left) elm.style.left = vars.left;
-					if(vars.alt) elm.setAttribute("alt", vars.alt);
-					if(vars.title) elm.setAttribute("title", vars.title);
-					briefcase.appendChild(elm);
+					if(vars.src != null){
+						let elm = document.createElement("IMG");
+						elm.className = "letTheBodiesHitTheFloor";
+						if(vars.src) elm.setAttribute("src", vars.src);
+						if(vars.width) elm.setAttribute("width", vars.width);
+						if(vars.height) elm.setAttribute("height", vars.height);
+						elm.style.setProperty('position','absolute');
+						if(vars.transform) elm.style.setProperty('transform',vars.transform);
+						if(vars.top) elm.style.setProperty('top',vars.top + "px");
+						if(vars.left) elm.style.setProperty('left',vars.left + "px");
+						if(vars.alt) elm.setAttribute("alt", vars.alt);
+						if(vars.title) elm.setAttribute("title", vars.title);
+						briefcase.appendChild(elm);
+					}else{
+						placePhoto({src:"https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg",
+						transform: (vars.transform || "rotate("+ Math.random()+"turn)"),
+						top: (vars.top || 0),left: (vars.left || 0),
+						alt: (vars.alt || "oh shid"),title: (vars.title || "She's Bananas, B A N A N A S")});
+					}
 				}else{
-					placePhoto({src:"https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg",top: "100px",left:"100px",alt:"oh shid",title:"She's Bananas, B A N A N A S"})
+					placePhoto({src:"https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg",
+						transform: "rotate("+ Math.random()+"turn)",
+						top: 0,left: 0,
+						alt: "oh shid",title: "She's Bananas, B A N A N A S"});
 				}
 			}
-			placePhoto();
-			//placePhoto("https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg");
-			//placePhoto("https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg","oh shid","She's Bananas, B A N A N A S");
-			
+			//placePhoto();
+			for(i = 0; i < 50; i++){
+				let win = window,
+					doc = document,
+					docElem = doc.documentElement,
+					body = doc.getElementsByTagName('body')[0],
+					x = win.innerWidth || docElem.clientWidth || body.clientWidth,
+					y = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+				placePhoto({top: Math.random() * (y-60),left: Math.random() * (x-60)});
+			}
 			/*var screen = document.getElementById('screen');
 			var ctx = screen.getContext("2d");
 			var backgroundColor = "blue";
