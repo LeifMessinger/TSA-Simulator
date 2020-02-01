@@ -24,11 +24,8 @@
 		<br>
 		<script>
 			var screen = document.getElementById('screen');
-			var scale = {x:.8,y:.8};//How large a 1x1 room is compared to the screen percent
-			var roomSize = {x:1,y:1};//Size compared to a normal room
 			var ctx = screen.getContext("2d");
-			var backgroundColor = "dimgray";
-			var thisRoomIsBigEnoughForTheBothOfUs = {x:0,y:0};//single room, x and y are pos on map
+			var backgroundColor = "darkgray";
 			/* How to create pattern for later
 			var img = new Image;
 			img.onload = imageIsReady;
@@ -60,35 +57,9 @@
 				ctx.fillRect(0,0,screen.width,screen.height);
 				drawRoom(makeRoom(thisRoomIsBigEnoughForTheBothOfUs));
 			}
-			function drawRoom(room){
-				ctx.fillStyle = 'sienna';
-				ctx.fillRect(room.pos.x,room.pos.y,room.scale.x,room.scale.y);
-				console.log(room);
-			}
-			function makeRoom(pos/*{x:1,y:1}*/){
-				roomWidth = scale.x*roomSize.x*screen.width;
-				roomHeight = scale.y*roomSize.y*screen.height;
-				roomPos = {x:(screen.width/2) - (roomWidth/2) + (pos.x*roomWidth),y:(screen.height/2) - (roomHeight/2) + (pos.y*roomHeight)}; //screen pos
-				return {pos:roomPos,scale:{x:roomWidth,y:roomHeight}}; //Pos, size room
-			}
 			draw();
 			function registerMouseClick(event) {
 				console.log("clientX: " + event.clientX + " - clientY: " + event.clientY);
-				if(woke){
-					if(event.clientX > screen.width/3 && event.clientX < 2*screen.width/3){
-						if(event.clientY > 0 && event.clientY < screen.height/3){
-							socket.emit('choice','rock');
-						}else{
-							if(event.clientY > screen.height/3 && event.clientY < 2*screen.height/3){
-								socket.emit('choice','paper');
-							}else{
-								if(event.clientY > 2*screen.height/3 && event.clientY < screen.height){
-									socket.emit('choice','scissors');
-								}
-							}
-						}
-					}
-				}
 				draw();
 			}
 			document.addEventListener("click", registerMouseClick);
