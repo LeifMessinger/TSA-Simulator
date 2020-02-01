@@ -37,6 +37,13 @@
 				width:100%;
 				height:100%;
 			}
+			img {
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-o-user-select: none;
+				user-select: none;
+			}
 		</style>
 	</head>
 	<body>
@@ -71,6 +78,7 @@
 						if(vars.height) elm.setAttribute("height", vars.height);
 						elm.style.setProperty('position','absolute');
 						elm.style.setProperty('pointer-events','none');
+						elm.style.setProperty('draggable','false');
 						if(vars.transform) elm.style.setProperty('transform',vars.transform);
 						if(vars.top) elm.style.setProperty('top',vars.top + "%");
 						if(vars.left) elm.style.setProperty('left',vars.left + "%");
