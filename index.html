@@ -7,9 +7,10 @@
 			* { margin: 0; padding: 0;}
 
 			body, html{
-			height:100%;
-			overflow: hidden;
-			touch-action: none;
+				background-color: 0;
+				height:100%;
+				overflow: hidden;
+				touch-action: none;
 			}
 			#briefcase{
 				position: relative;
@@ -18,7 +19,7 @@
 			}
 			.letTheBodiesHitTheFloor{
 				margin: 10px;
-				filter: grayscale(90%) opacity(50%);
+				filter: invert(1) opacity(50%) brightness(2);
 				position:absolute;
 				touch-action: none;
 				transform-origin: center;
