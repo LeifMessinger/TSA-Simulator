@@ -1,0 +1,180 @@
+<html>
+	<head>
+		<link rel="shortcut icon"  href="about:blank">
+		<!--<script src="//code.jquery.com/jquery.js"></script>-->
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>-->
+		<style>
+			* { margin: 0; padding: 0;}
+
+			body, html {
+			height:100%;
+			overflow: hidden;
+			}
+
+			#c {
+				position:absolute;
+				width:100%;
+				height:100%;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="screen" width="400" height="400"></canvas>
+		<!--<yeet id = "yeet">bruh</yeet>-->
+		<br>
+		<script>
+			var screen = document.getElementById('screen');
+			var scale = {x:.8,y:.8};//How large a 1x1 room is compared to the screen percent
+			var roomSize = {x:1,y:1};//Size compared to a normal room
+			var ctx = screen.getContext("2d");
+			var backgroundColor = "dimgray";
+			var thisRoomIsBigEnoughForTheBothOfUs = {x:0,y:0};//single room, x and y are pos on map
+			/* How to create pattern for later
+			var img = new Image;
+			img.onload = imageIsReady;
+			img.src = "data: ....."; // full uri here
+
+			function imageIsReady() {
+			  var pattern = ctx.createPattern(img, "repeat");
+			  ctx.fillStyle = pattern;
+			  // fill, etc.
+			}*/
+			function resize(){//Resize canvas to window size
+				let win = window,
+					doc = document,
+					docElem = doc.documentElement,
+					body = doc.getElementsByTagName('body')[0],
+					x = win.innerWidth || docElem.clientWidth || body.clientWidth,
+					y = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+				screen.height = y;
+				screen.width = x;
+				draw();
+			};
+			if(window.addEventListener) { //change canvas size when resized
+				window.addEventListener('resize',resize, true); //the true is "useCapture"
+			} else { //The browser does not support Javascript event binding
+			}
+			resize();
+			function draw(){
+				ctx.fillStyle = backgroundColor;
+				ctx.fillRect(0,0,screen.width,screen.height);
+				drawRoom(makeRoom(thisRoomIsBigEnoughForTheBothOfUs));
+			}
+			function drawRoom(room){
+				ctx.fillStyle = 'sienna';
+				ctx.fillRect(room.pos.x,room.pos.y,room.scale.x,room.scale.y);
+				console.log(room);
+			}
+			function makeRoom(pos/*{x:1,y:1}*/){
+				roomWidth = scale.x*roomSize.x*screen.width;
+				roomHeight = scale.y*roomSize.y*screen.height;
+				roomPos = {x:(screen.width/2) - (roomWidth/2) + (pos.x*roomWidth),y:(screen.height/2) - (roomHeight/2) + (pos.y*roomHeight)}; //screen pos
+				return {pos:roomPos,scale:{x:roomWidth,y:roomHeight}}; //Pos, size room
+			}
+			draw();
+			function registerMouseClick(event) {
+				console.log("clientX: " + event.clientX + " - clientY: " + event.clientY);
+				if(woke){
+					if(event.clientX > screen.width/3 && event.clientX < 2*screen.width/3){
+						if(event.clientY > 0 && event.clientY < screen.height/3){
+							socket.emit('choice','rock');
+						}else{
+							if(event.clientY > screen.height/3 && event.clientY < 2*screen.height/3){
+								socket.emit('choice','paper');
+							}else{
+								if(event.clientY > 2*screen.height/3 && event.clientY < screen.height){
+									socket.emit('choice','scissors');
+								}
+							}
+						}
+					}
+				}
+				draw();
+			}
+			document.addEventListener("click", registerMouseClick);
+		</script>
+		<!--<script>
+			var socket = io.connect();
+			var screen = document.getElementById('screen');
+			var ctx = screen.getContext("2d");
+			var backgroundColor = "red";
+			var placement = "";
+			var woke = true;
+			function draw(){
+				ctx.fillStyle = backgroundColor;
+				ctx.fillRect(0,0,screen.width,screen.height);
+				let subtitleSize = screen.width/30;
+				ctx.font= subtitleSize+"px Comic Sans MS";
+				ctx.fillStyle = "black";
+				ctx.textAlign = "center";
+				ctx.fillText(placement, screen.width/2,subtitleSize);
+				if(woke){
+					ctx.font= subtitleSize + "px Comic Sans MS";
+					ctx.fillStyle = "black";
+					ctx.textAlign = "center";
+					ctx.fillText("Rock", screen.width/2, screen.height/3 - screen.height/6);
+					ctx.fillText("Paper", screen.width/2, 2*screen.height/3 - screen.height/6);
+					ctx.fillText("Scissors", screen.width/2, screen.height - screen.height/6);
+				}
+			}
+			function resize(){//Resize canvas to window size
+				let win = window,
+					doc = document,
+					docElem = doc.documentElement,
+					body = doc.getElementsByTagName('body')[0],
+					x = win.innerWidth || docElem.clientWidth || body.clientWidth,
+					y = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+				screen.height = y;
+				screen.width = x;
+				draw();
+			};
+			resize();
+			draw();
+			if(window.addEventListener) { //change canvas size when resized
+				window.addEventListener('resize',resize, true); //the true is "useCapture"
+			} else { //The browser does not support Javascript event binding
+			}
+			socket.on('die', function () {
+				socket.close();
+				console.log('disconnied');
+				backgroundColor = "red";
+				draw();
+			});
+			socket.on('connected', function () {
+				console.log('connied');
+				backgroundColor = "lime";
+				draw();
+			});
+			socket.on('placement', function (data) {
+				console.log(data);
+				placement = data;
+				draw();
+			});
+			/*function printMousePos(event) {
+			  console.log(
+				"clientX: " + event.clientX +
+				" - clientY: " + event.clientY);
+			}*/
+			function registerMouseClick(event) {
+				console.log("clientX: " + event.clientX + " - clientY: " + event.clientY);
+				if(woke){
+					if(event.clientX > screen.width/3 && event.clientX < 2*screen.width/3){
+						if(event.clientY > 0 && event.clientY < screen.height/3){
+							socket.emit('choice','rock');
+						}else{
+							if(event.clientY > screen.height/3 && event.clientY < 2*screen.height/3){
+								socket.emit('choice','paper');
+							}else{
+								if(event.clientY > 2*screen.height/3 && event.clientY < screen.height){
+									socket.emit('choice','scissors');
+								}
+							}
+						}
+					}
+				}
+				draw();
+			}
+			document.addEventListener("click", registerMouseClick);
+		</script>-->
+	</body>
+</html>
