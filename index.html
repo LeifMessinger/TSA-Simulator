@@ -13,14 +13,19 @@
 				touch-action: none;
 			}
 			#briefcase{
+				margin-left: 0%;
+				margin-top: 0%;
+				margin-right: 9%;
+				margin-bottom: 9%;
 				position: relative;
+				//overflow: hidden;
+				height: 94.6%;
 				//top: 300px;
 				//left: 100px;
 			}
 			.letTheBodiesHitTheFloor{
-				margin: 10px;
 				filter: invert(1) opacity(50%) brightness(2);
-				position:absolute;
+				position:relative;
 				touch-action: none;
 				transform-origin: center;
 				width: 10%;
@@ -42,7 +47,20 @@
 		<!--<yeet id = "yeet">bruh</yeet>-->
 		<br>
 		<script>
-			briefcase = document.getElementById('briefcase');
+			var briefcase = document.getElementById('briefcase');
+			var numItems = 50;
+			var items = [];
+			var pictures = [];
+			var specialOne = null;
+			function clearScreen(){
+				for(p in pictures) removeElement(pictures[p]);
+				pictures = [];
+				items = [];
+				console.log("Screen cleared.");
+			}
+			function removeElement(element){
+				element.parentNode.removeChild(element);
+			}
 			function placePhoto(vars){
 				if(vars != null){
 					if(vars.src != null){
@@ -52,35 +70,50 @@
 						if(vars.width) elm.setAttribute("width", vars.width);
 						if(vars.height) elm.setAttribute("height", vars.height);
 						elm.style.setProperty('position','absolute');
+						elm.style.setProperty('pointer-events','none');
 						if(vars.transform) elm.style.setProperty('transform',vars.transform);
-						if(vars.top) elm.style.setProperty('top',vars.top + "px");
-						if(vars.left) elm.style.setProperty('left',vars.left + "px");
+						if(vars.top) elm.style.setProperty('top',vars.top + "%");
+						if(vars.left) elm.style.setProperty('left',vars.left + "%");
 						if(vars.alt) elm.setAttribute("alt", vars.alt);
 						if(vars.title) elm.setAttribute("title", vars.title);
 						briefcase.appendChild(elm);
+						return briefcase.lastChild;
 					}else{
-						placePhoto({src:"https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg",
+						return placePhoto({src:"https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg",
 						transform: (vars.transform || "rotate("+ Math.random()+"turn)"),
 						top: (vars.top || 0),left: (vars.left || 0),
 						alt: (vars.alt || "oh shid"),title: (vars.title || "She's Bananas, B A N A N A S")});
 					}
 				}else{
-					placePhoto({src:"https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg",
+					return placePhoto({src:"https://upload.wikimedia.org/wikipedia/commons/f/f7/Bananas.svg",
 						transform: "rotate("+ Math.random()+"turn)",
 						top: 0,left: 0,
 						alt: "oh shid",title: "She's Bananas, B A N A N A S"});
 				}
 			}
 			//placePhoto();
-			for(i = 0; i < 50; i++){
-				let win = window,
-					doc = document,
-					docElem = doc.documentElement,
-					body = doc.getElementsByTagName('body')[0],
-					x = win.innerWidth || docElem.clientWidth || body.clientWidth,
-					y = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
-				placePhoto({top: Math.random() * (y-60),left: Math.random() * (x-60)});
+			function throwItems(){
+				numItems = 50;
+				items = [];
+				pictures = [];
+				for(i = 0; i < numItems; i++){
+					let win = window,
+						doc = document,
+						docElem = doc.documentElement,
+						body = doc.getElementsByTagName('body')[0],
+						x = win.innerWidth || docElem.clientWidth || body.clientWidth,
+						y = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+					items.push({top:Math.random() * 100.0,left:Math.random() * 100.0,width: 1.0/numItems});
+					pictures.push(placePhoto(items[items.length-1]));
+				}
+				specialOne = Math.floor(Math.random()*pictures.length);
+					pictures[specialOne].onclick = function(){clearScreen(); throwItems();};
+					pictures[specialOne].style.filter = "hue-rotate(90deg)" + pictures[specialOne].style.filter;
+					pictures[specialOne].style.removeProperty('pointer-events');
+					console.log(items[specialOne]);
+				console.log("Items thrown.");
 			}
+			throwItems();
 			/*var screen = document.getElementById('screen');
 			var ctx = screen.getContext("2d");
 			var backgroundColor = "blue";
